@@ -1,0 +1,13 @@
+echo "__pycache__/
+*.pyc
+*.ipynb_checkpoints
+.DS_Store
+*.log
+*.csv
+*.xlsx
+*.h5
+*.pkl
+*.joblib
+env/
+venv/
+" > .gitignore
