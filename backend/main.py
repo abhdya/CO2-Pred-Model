@@ -16,12 +16,12 @@ def load_model(path):
 
 # Pre-load available models
 models = {
-    "BulkCarrier": load_model('Models/ship_model_1.joblib'),
-    "GasCarrier": load_model('Models/ship_model_2.joblib'),
-    "Tanker": load_model('Models/ship_model_3.joblib'),
-    "Containership": load_model('Models/ship_model_4.joblib'),
-    "RefrigeratedCargoCarrier": load_model('Models/ship_model_6.joblib'),
-    "RoRoCargoShipVehicleCarrier": load_model('Models/ship_model_9.joblib'),
+    "BulkCarrier": load_model('ship_model_1.joblib'),
+    "GasCarrier": load_model('ship_model_2.joblib'),
+    "Tanker": load_model('ship_model_3.joblib'),
+    "Containership": load_model('ship_model_4.joblib'),
+    "RefrigeratedCargoCarrier": load_model('ship_model_6.joblib'),
+    "RoRoCargoShipVehicleCarrier": load_model('ship_model_9.joblib'),
     "GeneralCargoShip": None,
     "CombinationCarrier": None,
     "HighSpeedCraft": None, 
