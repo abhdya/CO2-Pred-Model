@@ -156,7 +156,7 @@ async def upload_excel(file: UploadFile = File(...)):
         return {"error": str(e)}
 
 # Load Norbulk data
-norbulk_df = pd.read_excel('Ship_Excel_Data.xlsx', engine='openpyxl')
+norbulk_df = pd.read_excel('Ship_Data_Excel.xlsx', engine='openpyxl')
 
 ship_type_mapping = {
     1: "BulkCarrier",
