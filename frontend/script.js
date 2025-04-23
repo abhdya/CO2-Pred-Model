@@ -1,12 +1,13 @@
 let shipTypes = [];
 const checkboxValues = {};
+const BACKEND_URL = "https://co2-backend.onrender.com"; // ⬅️ Set your backend URL here
 
 // Function to load ship types on page load
 async function loadShipTypes() {
     try {
-        const response = await fetch("http://127.0.0.1:8000/get-ship-types/");
+        const response = await fetch(`${BACKEND_URL}/get-ship-types/`);
         const data = await response.json();
-        
+
         if (data.ship_types) {
             populateShipTypes(data.ship_types);
         } else {
@@ -21,10 +22,10 @@ async function loadShipTypes() {
 function populateShipTypes(types) {
     const shipTypeSelect = document.getElementById("shipType");
     shipTypeSelect.innerHTML = "<option value=''>Select Ship Type</option>";
-    
+
     types.forEach(type => {
         const option = document.createElement("option");
-        option.value = type.id;  // Use ship type ID as value
+        option.value = type.id;
         option.textContent = type.name;
         shipTypeSelect.appendChild(option);
     });
@@ -34,14 +35,14 @@ function populateShipTypes(types) {
 async function updateShipNames() {
     const shipTypeSelect = document.getElementById("shipType");
     const selectedIndex = shipTypeSelect.selectedIndex;
-    if (selectedIndex === -1) return; // Do nothing if no ship type is selected
-    
+    if (selectedIndex === -1) return;
+
     const shipTypeName = shipTypeSelect.options[selectedIndex].textContent;
-    
+
     try {
-        const response = await fetch(`http://127.0.0.1:8000/get-ship-names/${encodeURIComponent(shipTypeName)}`);
+        const response = await fetch(`${BACKEND_URL}/get-ship-names/${encodeURIComponent(shipTypeName)}`);
         const data = await response.json();
-        
+
         const shipNameSelect = document.getElementById("shipName");
         shipNameSelect.innerHTML = "<option value=''>Select Ship Name</option>";
 
@@ -63,11 +64,11 @@ async function updateShipNames() {
 // Fetch Deadweight & Gross Tonnage based on ship name
 async function updateValues() {
     const shipName = document.getElementById("shipName").value;
-    
+
     if (!shipName) return;
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/get-ship-data/${shipName}`);
+        const response = await fetch(`${BACKEND_URL}/get-ship-data/${encodeURIComponent(shipName)}`);
         const data = await response.json();
 
         if (data.deadweight && data.grosstonnage) {
@@ -84,7 +85,7 @@ async function updateValues() {
 // Update checkbox values
 function updateCheckboxValue(checkbox) {
     checkboxValues[checkbox.value] = checkbox.checked ? 1 : 0;
-    console.log("Updated checkboxValues:", checkboxValues); // For debugging
+    console.log("Updated checkboxValues:", checkboxValues);
 }
 
 // Predict CO2 Emissions
@@ -100,7 +101,6 @@ async function predictEmissions() {
         return;
     }
 
-    // Prepare input data with the correct fuel type keys
     const inputData = {
         ship_type: document.getElementById("shipType").options[document.getElementById("shipType").selectedIndex].textContent,
         Deadweight: deadweight,
@@ -118,7 +118,7 @@ async function predictEmissions() {
     };
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/predict", {
+        const response = await fetch(`${BACKEND_URL}/predict`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(inputData)
@@ -132,11 +132,13 @@ async function predictEmissions() {
     }
 }
 
-// Load ship types when page loads
-document.addEventListener('DOMContentLoaded', loadShipTypes);
+// On DOM load
+document.addEventListener('DOMContentLoaded', () => {
+    loadShipTypes();
 
-// Add event listeners for checkboxes
-const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', () => updateCheckboxValue(checkbox));
+    // Add listeners after DOM is ready
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => updateCheckboxValue(checkbox));
+    });
 });
