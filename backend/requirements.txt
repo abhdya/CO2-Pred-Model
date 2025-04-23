@@ -13,3 +13,4 @@ imblearn
 ipykernel 
 jupyter 
 pygments
+python-multipart
